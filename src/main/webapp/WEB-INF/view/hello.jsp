@@ -19,9 +19,6 @@
 </head>
 <body>
     Hello Jsp
-    <h1>
-        ${vien}
-    </h1>
     <button class="btn btn-warning">Submit</button>
 </body>
 </html>
