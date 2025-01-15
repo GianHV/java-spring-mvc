@@ -8,7 +8,6 @@ import vn.hoidanit.laptopshop.service.validator.RegisterChecked;
 @RegisterChecked
 public class RegisterDTO {
 
-    @NotNull(message =  "Tên không được để trống")
     @Size(min = 3, message = "FirstName phải có tối thiểu 3 ký tự")
     private String firstName;
 
