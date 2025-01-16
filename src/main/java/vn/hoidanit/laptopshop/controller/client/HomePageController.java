@@ -32,6 +32,7 @@ public class HomePageController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final OrderService orderService;
+    private final int LIMIT_PRODUCT_PER_PAGE = 10;
 
     public HomePageController(
             ProductService productService,
@@ -46,7 +47,7 @@ public class HomePageController {
 
     @GetMapping("/")
     public String getHomePage(Model model) {
-        Pageable pageable = PageRequest.of(0, 10);
+        Pageable pageable = PageRequest.of(0, LIMIT_PRODUCT_PER_PAGE);
         Page<Product> prs = this.productService.fetchProducts(pageable);
         List<Product> products = prs.getContent();
 
