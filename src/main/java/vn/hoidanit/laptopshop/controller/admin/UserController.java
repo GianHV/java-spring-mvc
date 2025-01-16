@@ -70,29 +70,30 @@ public class UserController {
 
     @PostMapping(value = "/admin/user/create")
     public String createUserPage(Model model,
-            @ModelAttribute("newUser") @Valid User request,
+            @ModelAttribute("newUser") @Valid User hoidanit,
             BindingResult newUserBindingResult,
             @RequestParam("hoidanitFile") MultipartFile file) {
 
-        List<FieldError> errors = newUserBindingResult.getFieldErrors();
-        for (FieldError error : errors) {
-            System.out.println(">>>>" + error.getField() + " - " + error.getDefaultMessage());
-        }
+        // List<FieldError> errors = newUserBindingResult.getFieldErrors();
+        // for (FieldError error : errors) {
+        // System.out.println(">>>>" + error.getField() + " - " +
+        // error.getDefaultMessage());
+        // }
 
         // validate
         if (newUserBindingResult.hasErrors()) {
             return "admin/user/create";
         }
-        
+
+        //
         String avatar = this.uploadService.handleSaveUploadFile(file, "avatar");
-        String hashPassword = this.passwordEncoder.encode(request.getPassword());
+        String hashPassword = this.passwordEncoder.encode(hoidanit.getPassword());
 
-        request.setAvatar(avatar);
-        request.setPassword(hashPassword);
-        request.setRole(this.userService.getRoleByName(request.getRole().getName()));
-
-        this.userService.handleSaveUser(request);
-
+        hoidanit.setAvatar(avatar);
+        hoidanit.setPassword(hashPassword);
+        hoidanit.setRole(this.userService.getRoleByName(hoidanit.getRole().getName()));
+        // save
+        this.userService.handleSaveUser(hoidanit);
         return "redirect:/admin/user";
     }
 
