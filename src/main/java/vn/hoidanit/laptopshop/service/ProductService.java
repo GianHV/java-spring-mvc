@@ -11,6 +11,7 @@ import vn.hoidanit.laptopshop.domain.CartDetail;
 import vn.hoidanit.laptopshop.domain.Order;
 import vn.hoidanit.laptopshop.domain.OrderDetail;
 import vn.hoidanit.laptopshop.domain.Product;
+import vn.hoidanit.laptopshop.domain.Product_;
 import vn.hoidanit.laptopshop.domain.User;
 import vn.hoidanit.laptopshop.repository.CartDetailRepository;
 import vn.hoidanit.laptopshop.repository.CartRepository;
@@ -19,6 +20,7 @@ import vn.hoidanit.laptopshop.repository.OrderRepository;
 import vn.hoidanit.laptopshop.repository.ProductRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
 @Service
 public class ProductService {
@@ -48,8 +50,12 @@ public class ProductService {
         return this.productRepository.save(pr);
     }
 
-    public Page<Product> fetchProducts(Pageable page) {
-        return this.productRepository.findAll(page);
+    private Specification<Product> nameLike(String name) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get(Product_.NAME), "%" + name + "%");
+    }
+
+    public Page<Product> fetchProducts(Pageable page, String name) {
+        return this.productRepository.findAll(this.nameLike(name), page);
     }
 
     public Optional<Product> fetchProductById(long id) {
