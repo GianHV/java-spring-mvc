@@ -46,6 +46,7 @@
 
 
                 <jsp:include page="../layout/banner.jsp" />
+                <jsp:include page="../layout/chatbot.jsp" />
 
 
 

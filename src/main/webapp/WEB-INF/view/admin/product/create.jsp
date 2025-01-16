@@ -13,6 +13,8 @@
                 <title>Create Product - Hỏi Dân IT</title>
                 <link href="/css/styles.css" rel="stylesheet" />
                 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+                <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+                <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
                 <script>
                     $(document).ready(() => {
                         const avatarFile = $("#avatarFile");
@@ -22,6 +24,23 @@
                             $("#avatarPreview").css({ "display": "block" });
                         });
                     });
+                    $(document).ready(function() {
+        $('#summernote').summernote({
+            height: 300, 
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'italic', 'underline', 'clear']],
+                ['fontname', ['fontname']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['height', ['height']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'hr']],
+                ['view', ['fullscreen', 'codeview']],
+                ['help', ['help']]
+            ]
+        });
+    });
                 </script>
                 <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
             </head>
@@ -78,7 +97,7 @@
                                                 </div>
                                                 <div class="mb-3 col-12">
                                                     <label class="form-label">Detail description:</label>
-                                                    <form:textarea type="text"
+                                                    <form:textarea id="summernote" type="text"
                                                         class="form-control ${not empty errorDetailDesc ? 'is-invalid' : ''}"
                                                         path="detailDesc" />
                                                     ${errorDetailDesc}
