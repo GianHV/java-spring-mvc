@@ -6,6 +6,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import vn.hoidanit.laptopshop.service.UserService;
 
+/**
+ * This controller handles routing actions related to the admin dashboard.
+ * 
+ * Responsibilities:
+ * - Display the admin dashboard page.
+ */
 @Controller
 public class DashboardController {
 

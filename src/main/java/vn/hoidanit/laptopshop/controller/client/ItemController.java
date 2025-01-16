@@ -19,20 +19,47 @@ import vn.hoidanit.laptopshop.domain.Product;
 import vn.hoidanit.laptopshop.domain.User;
 import vn.hoidanit.laptopshop.service.ProductService;
 
+/**
+ * This controller handles routing actions related to item information.
+ * It includes methods for displaying detailed information about a specific product.
+ * 
+ * Responsibilities:
+ * - Display product details based on the product ID.
+ * 
+ * Dependencies:
+ * - ProductService: For retrieving product-related data.
+ */
 @Controller
 public class ItemController {
 
+    // Service for handling product-related operations
     private final ProductService productService;
 
+    /**
+     * Constructor for injecting the ProductService dependency.
+     * 
+     * @param productService Service for product-related operations.
+     */
     public ItemController(ProductService productService) {
         this.productService = productService;
     }
 
+    /**
+     * Handles GET requests for displaying a product's details.
+     * 
+     * @param model Spring model for passing attributes to the view.
+     * @param id    ID of the product to be fetched.
+     * @return String representing the view name for the product details page.
+     */
     @GetMapping("/product/{id}")
     public String getProductPage(Model model, @PathVariable long id) {
+        // Fetch the product by its ID
         Product pr = this.productService.fetchProductById(id).get();
+
+        // Add the product and its ID to the model
         model.addAttribute("product", pr);
         model.addAttribute("id", id);
+
         return "client/product/detail";
     }
 

@@ -2,7 +2,9 @@ package vn.hoidanit.laptopshop.service.validator;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-
+/*
+ * Validator class that implements the validation logic for the `StrongPassword` annotation.
+ */
 public class StrongPasswordValidator implements ConstraintValidator<StrongPassword, String> {
 
     @Override

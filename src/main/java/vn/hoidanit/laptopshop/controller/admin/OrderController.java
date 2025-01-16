@@ -17,6 +17,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import vn.hoidanit.laptopshop.domain.Order;
 import vn.hoidanit.laptopshop.service.OrderService;
 
+/**
+ * This controller handles routing actions related to managing orders in the admin section.
+ * 
+ * Responsibilities:
+ * - Display the order management page in the admin dashboard.
+ */
 @Controller
 public class OrderController {
 

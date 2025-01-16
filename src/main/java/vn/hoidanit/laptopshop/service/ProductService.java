@@ -20,8 +20,14 @@ import vn.hoidanit.laptopshop.repository.ProductRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+/*
+ * This service class provides business logic for interacting with the Product entity.
+ * It acts as a bridge between the controller and the repository layer.
+ */
 @Service
 public class ProductService {
+    
+    // ProductRepository is injected to perform database operations for the Product entity
     private final ProductRepository productRepository;
     private final CartRepository cartRepository;
     private final CartDetailRepository cartDetailRepository;
@@ -45,6 +51,7 @@ public class ProductService {
     }
 
     public Product createProduct(Product pr) {
+        // Save the product and return the saved product entity
         return this.productRepository.save(pr);
     }
 
@@ -52,11 +59,26 @@ public class ProductService {
         return this.productRepository.findAll(page);
     }
 
+    /*
+     * This method fetches a product by its ID from the database.
+     * It returns an Optional, which may or may not contain the product.
+     * 
+     * @param id the ID of the product to fetch.
+     * @return an Optional containing the product, or an empty Optional if not found.
+     */
     public Optional<Product> fetchProductById(long id) {
+        // Fetch and return the product by ID
         return this.productRepository.findById(id);
     }
 
+    /*
+     * This method deletes a product by its ID from the database.
+     * It uses the ProductRepository to perform the deletion.
+     * 
+     * @param id the ID of the product to be deleted.
+     */
     public void deleteProduct(long id) {
+        // Delete the product by its ID
         this.productRepository.deleteById(id);
     }
 

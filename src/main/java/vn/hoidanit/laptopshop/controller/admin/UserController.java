@@ -27,6 +27,10 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 
+/**
+ * This controller manages user-related actions in the admin section, 
+ * including creating, updating, deleting, and displaying user details.
+ */
 @Controller
 public class UserController {
 
@@ -35,23 +39,38 @@ public class UserController {
     private final PasswordEncoder passwordEncoder;
     private final int LIMIT_USER_PER_PAGE = 4;
 
-    public UserController(
-            UserService userService,
-            UploadService uploadService,
-            PasswordEncoder passwordEncoder) {
+    /**
+     * Constructor for dependency injection.
+     *
+     * @param userService       Service for user operations.
+     * @param uploadService     Service for file uploads.
+     * @param passwordEncoder   Service for encoding passwords.
+     */
+    public UserController(UserService userService, UploadService uploadService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.uploadService = uploadService;
         this.passwordEncoder = passwordEncoder;
     }
 
+    /**
+     * Displays the home page.
+     *
+     * @param model Spring model for passing attributes to the view.
+     * @return String representing the home page view name.
+     */
     @RequestMapping("/")
     public String getHomePage(Model model) {
-
         model.addAttribute("eric", "test");
         model.addAttribute("hoidanit", "from controller with model");
         return "hello";
     }
 
+    /**
+     * Displays the user management page.
+     *
+     * @param model Spring model for passing attributes to the view.
+     * @return String representing the user management page view name.
+     */
     @RequestMapping("/admin/user")
     public String getUserPage(Model model,
             @RequestParam("page") Optional<String> pageOptional) {
@@ -76,6 +95,13 @@ public class UserController {
         return "admin/user/show";
     }
 
+    /**
+     * Displays the user detail page for a specific user.
+     *
+     * @param model Spring model for passing attributes to the view.
+     * @param id    ID of the user.
+     * @return String representing the user detail page view name.
+     */
     @RequestMapping("/admin/user/{id}")
     public String getUserDetailPage(Model model, @PathVariable long id) {
         User user = this.userService.getUserById(id);
@@ -84,13 +110,28 @@ public class UserController {
         return "admin/user/detail";
     }
 
+    /**
+     * Displays the page for creating a new user.
+     *
+     * @param model Spring model for passing attributes to the view.
+     * @return String representing the create user page view name.
+     */
     @GetMapping("/admin/user/create")
     public String getCreateUserPage(Model model) {
         model.addAttribute("newUser", new User());
         return "admin/user/create";
     }
 
-    @PostMapping(value = "/admin/user/create")
+    /**
+     * Handles form submission for creating a new user.
+     *
+     * @param model                  Spring model for passing attributes to the view.
+     * @param request                User object bound to the form.
+     * @param newUserBindingResult   Binding result for validating input data.
+     * @param file                   Uploaded avatar file.
+     * @return String representing the redirect URL or view name.
+     */
+    @PostMapping("/admin/user/create")
     public String createUserPage(Model model,
             @ModelAttribute("newUser") @Valid User hoidanit,
             BindingResult newUserBindingResult,
@@ -102,7 +143,6 @@ public class UserController {
         // error.getDefaultMessage());
         // }
 
-        // validate
         if (newUserBindingResult.hasErrors()) {
             return "admin/user/create";
         }
@@ -119,39 +159,64 @@ public class UserController {
         return "redirect:/admin/user";
     }
 
-    @RequestMapping("/admin/user/update/{id}") // GET
+    /**
+     * Displays the page for updating an existing user.
+     *
+     * @param model Spring model for passing attributes to the view.
+     * @param id    ID of the user to update.
+     * @return String representing the update user page view name.
+     */
+    @RequestMapping("/admin/user/update/{id}")
     public String getUpdateUserPage(Model model, @PathVariable long id) {
         User currentUser = this.userService.getUserById(id);
         model.addAttribute("newUser", currentUser);
         return "admin/user/update";
     }
 
+    /**
+     * Handles form submission for updating an existing user.
+     *
+     * @param model  Spring model for passing attributes to the view.
+     * @param user   Updated user data.
+     * @return String representing the redirect URL.
+     */
     @PostMapping("/admin/user/update")
-    public String postUpdateUser(Model model, @ModelAttribute("newUser") User hoidanit) {
-        User currentUser = this.userService.getUserById(hoidanit.getId());
+    public String postUpdateUser(Model model, @ModelAttribute("newUser") User user) {
+        User currentUser = this.userService.getUserById(user.getId());
         if (currentUser != null) {
-            currentUser.setAddress(hoidanit.getAddress());
-            currentUser.setFullName(hoidanit.getFullName());
-            currentUser.setPhone(hoidanit.getPhone());
+            currentUser.setAddress(user.getAddress());
+            currentUser.setFullName(user.getFullName());
+            currentUser.setPhone(user.getPhone());
 
-            // bug here
             this.userService.handleSaveUser(currentUser);
         }
         return "redirect:/admin/user";
     }
 
+    /**
+     * Displays the page for deleting a user.
+     *
+     * @param model Spring model for passing attributes to the view.
+     * @param id    ID of the user to delete.
+     * @return String representing the delete user page view name.
+     */
     @GetMapping("/admin/user/delete/{id}")
     public String getDeleteUserPage(Model model, @PathVariable long id) {
         model.addAttribute("id", id);
-        // User user = new User();
-        // user.setId(id);
         model.addAttribute("newUser", new User());
         return "admin/user/delete";
     }
 
+    /**
+     * Handles form submission for deleting a user.
+     *
+     * @param model Spring model for passing attributes to the view.
+     * @param user  User object with the ID to delete.
+     * @return String representing the redirect URL.
+     */
     @PostMapping("/admin/user/delete")
-    public String postDeleteUser(Model model, @ModelAttribute("newUser") User eric) {
-        this.userService.deleteUser(eric.getId());
+    public String postDeleteUser(Model model, @ModelAttribute("newUser") User user) {
+        this.userService.deleteUser(user.getId());
         return "redirect:/admin/user";
     }
 }
