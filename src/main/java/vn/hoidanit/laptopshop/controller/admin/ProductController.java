@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import jakarta.validation.Valid;
 import vn.hoidanit.laptopshop.domain.Product;
@@ -23,6 +26,7 @@ public class ProductController {
 
     private final UploadService uploadService;
     private final ProductService productService;
+    private final int LIMIT_PRODUCT_PER_PAGE = 4;
 
     public ProductController(
             UploadService uploadService,
@@ -32,9 +36,17 @@ public class ProductController {
     }
 
     @GetMapping("/admin/product")
-    public String getProduct(Model model) {
-        List<Product> prs = this.productService.fetchProducts();
-        model.addAttribute("products", prs);
+    public String getProduct(Model model,
+            @RequestParam("page") int page) {
+
+        Pageable pageable = PageRequest.of(page - 1, LIMIT_PRODUCT_PER_PAGE);
+        Page<Product> prs = this.productService.fetchProducts(pageable);
+        List<Product> listProducts = prs.getContent();
+
+        model.addAttribute("products", listProducts);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", prs.getTotalPages());
+
         return "admin/product/show";
     }
 
